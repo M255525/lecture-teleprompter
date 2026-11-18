@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>講師現場提詞器・操作手冊</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#E9ECF2;--sub:#9AA3B2;--bg:#121418;--paper:#1E222A;--line:#323845;--amber:#FFB020;--red:#FF5A5F;--blue:#6EA8FE;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Noto Sans TC','Microsoft JhengHei',sans-serif;font-size:17px;line-height:1.75}
+main{max-width:800px;margin:0 auto;padding:20px 16px 48px}
+h1,h2{font-weight:900;line-height:1.35}
+h1{font-size:30px;margin:0 0 6px}
+h2{font-size:22px;margin:4px 0 8px;color:var(--amber)}
+section{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 18px 14px;margin-top:14px}
+a{color:var(--amber);font-weight:700}
+li{margin:5px 0}
+ol,ul{padding-left:1.3em}
+kbd{font-family:Consolas,monospace;background:#2A2F3A;border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.9em}
+.red{color:var(--red);font-weight:900}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:15px;min-width:480px}
+th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
+th{background:#252A34}
+@media print{body{background:#fff;color:#000}section{break-inside:avoid;background:#fff}h2{color:#000}}
+</style>
+<body>
+<main>
+<h1>🎬 講師現場提詞器・操作手冊</h1>
+<p><a href="index.html">← 回到提詞器</a></p>
+
+<section>
+<h2>這是什麼</h2>
+<p>放在講台上給<b>講師自己看</b>的提詞器，建議用平板或筆電。上課前把課程排成一段一段，上課時畫面會用大字顯示：</p>
+<ul>
+<li>現在這段的標題、<b>倒數時間</b>、要點、講稿備註</li>
+<li>下一段是什麼、全部段落的表定時間</li>
+<li>預計幾點下課、比表定<b>落後或超前幾分鐘</b></li>
+</ul>
+<p>落後時會自動建議「刪掉哪一段」或「縮短哪一段」，按一下就套用。下課後會產生時間報告，告訴你哪一段常超時。</p>
+<p>不用註冊、不用安裝；資料只存在這台裝置。建議「加入主畫面」，教室沒網路也能用。</p>
+</section>
+
+<section>
+<h2>📝 排課</h2>
+<ol>
+<li>填課程名稱、開始時間，表定下課時間可填可不填（填了才會檢查總長）。</li>
+<li>一段一列：標題、分鐘、類型（🎙 講授、🛠 實作練習、💬 分組討論、🙋 互動活動、❓ 問答、☕ 休息）。</li>
+<li>展開「要點與講稿」：<b>要點</b>一行一點，上課時大字顯示；<b>講稿備註</b>是只有你看得到的提醒。</li>
+<li>把可以不講的段落勾「<b>可刪減</b>」，例如補充案例、延伸示範。現場落後時會先建議刪這些。</li>
+<li>右邊的時間軸會算出每段幾點開始；「排課檢查」會提醒：總長超過表定、連續講授太久、超過 2 小時沒休息、還沒標可刪減。</li>
+</ol>
+<ul>
+<li><b>📋 貼上大綱</b>：一行一段，後面寫分鐘，例如 <code>開場與破冰 10</code>、<code>實作練習｜20分</code>、<code>午餐 1小時</code>。全部數字都不超過 8 又沒寫單位時，會當成小時。類型會依標題猜，可以再改。</li>
+<li><b>🎓 從講師型錄帶入</b>：如果你在同一個網站用過「講師簡介與課程型錄產生器」，可以直接帶入那邊的課程大綱。</li>
+<li><b>💾 存到我的課程</b>：最多存 30 個，可以匯出成檔案搬到另一台裝置。</li>
+<li><b>🖨 列印時間表</b>：印一張 A4 紙本時間表放講台，當作備案。</li>
+</ul>
+</section>
+
+<section>
+<h2>🎬 上課</h2>
+<ul>
+<li>按「▶ 開始上課」就開始計時。<b>如果現在時間和表定開始差超過 30 分鐘</b>（例如排練），會改用「現在」當開始時間來算預計下課。</li>
+<li>倒數數字：正常是白色，剩下設定的分鐘數（預設 2 分）時變<b>黃色</b>，超時變<span class="red">紅色</span>並顯示「+超過的時間」。開了提示音的話會響一聲／兩聲。</li>
+<li>上方的燈號：<b>準時／超前</b>是綠色，落後是黃色，落後超過設定值（預設 3 分）是紅色，同時會跳出刪減建議。</li>
+<li><b>刪減建議</b>：先從後面「可刪減」的段落找剛好夠補回時間的組合；不夠的話，再縮短練習、討論、互動、問答、休息（每段最多縮 3～4 成，至少留 5 分鐘），<b>講授段不會被縮短</b>。按「套用建議」才會生效；按「先不要」會等落後更多時才再提醒。</li>
+<li>連續講授超過設定時間（預設 20 分），會提醒你問個問題或讓學員動一動。</li>
+<li>右邊段落清單<b>點兩下</b>可以直接跳到那一段（第一下會先標黃，避免誤觸）。</li>
+<li>「⏭ 刪掉這段直接下一段」、「−1 分／＋1 分」調整目前這段的長度；「⏸ 暫停」時這段不計時（例如臨時處理設備）。</li>
+<li>不小心重新整理或關掉頁面也沒關係，再打開會<b>接著原本的計時</b>。</li>
+<li>「⛶ 全螢幕」可以藏掉瀏覽器的網址列；iPhone／iPad 不支援時，請改用「加入主畫面」。</li>
+</ul>
+<div class="tw"><table><tr><th>按鍵（簡報筆也可以）</th><th>功能</th></tr>
+<tr><td><kbd>PageDown</kbd> <kbd>→</kbd> <kbd>↓</kbd></td><td>下一段（大部分簡報筆的「下一頁」）</td></tr>
+<tr><td><kbd>PageUp</kbd> <kbd>←</kbd> <kbd>↑</kbd></td><td>上一段</td></tr>
+<tr><td><kbd>.</kbd> <kbd>B</kbd> <kbd>空白鍵</kbd></td><td>暫停／繼續（簡報筆的「黑畫面」鍵）</td></tr>
+<tr><td><kbd>+</kbd> <kbd>-</kbd></td><td>這段加減 1 分鐘</td></tr></table></div>
+<p>0.7 秒內連按只算一次，避免簡報筆連點跳太多段。<b>提醒：簡報筆同時控制投影片時，提詞器所在的視窗要在前景才收得到按鍵</b>；一般建議提詞器放在另一台平板，用螢幕上的按鈕操作。</p>
+</section>
+
+<section>
+<h2>📊 課後報告</h2>
+<ul>
+<li>最後一段按「結束 🏁」，或中途按「⏹ 結束課程」，就會產生報告：每段預計和實際用了幾分鐘、和表定下課差多少、刪掉了哪些段。</li>
+<li>會自動列出超時最多的段落和建議（例如「下次排 28 分鐘」）。</li>
+<li>「↩ 把實際時間套回排課」會用實際分鐘數更新排課，下次排得更準。</li>
+<li>可以下載 CSV（Excel 打得開）或複製文字。</li>
+</ul>
+</section>
+
+<section>
+<h2>⚙ 常用設定</h2>
+<ul>
+<li><b>顯示</b>：操作畫面字級；上課畫面字級（標準／大／特大，離講台遠時用大一點）；上課畫面底色（教室很亮時用白底）。</li>
+<li><b>🔔 提示音與震動</b>：開關與試聽。瀏覽器規定要先點過畫面一次才會出聲。</li>
+<li><b>⌨ 簡報筆與鍵盤</b>：按鍵說明。</li>
+<li><b>💾 我的課程</b>：匯出、匯入。</li>
+<li><b>🧹 清除全部資料</b>、<b>關於本工具</b>（操作手冊、創作者資訊、使用警語、加入主畫面、訪客數）。</li>
+</ul>
+</section>
+
+<section>
+<h2>⚠ 使用警語</h2>
+<ul>
+<li>計時依這台裝置的時鐘；上課前請確認時間正確、<b>接上電源</b>，並關掉自動鎖定（工具會盡量讓螢幕保持亮著，但部分瀏覽器不支援）。</li>
+<li>刪減與壓縮建議只依你排的分鐘數和「可刪減」標記計算，<b>是否真的刪減請自己判斷</b>；政府補助課程的實際授課時數請依計畫規定，不能因為落後就少上。</li>
+<li>課程與上課紀錄只存在這台裝置，不會上傳；換裝置前請匯出。</li>
+<li>範例課程全部虛構。</li>
+</ul>
+</section>
+
+<section id="creator">
+<h2>👤 關於創作者</h2>
+<div class="mk-creator">
+<style>.mk-creator{line-height:1.75}.mk-creator h3{margin:14px 0 6px;font-size:1.05em}.mk-creator table{width:100%;border-collapse:collapse;font-size:.95em}.mk-creator td,.mk-creator th{text-align:left;padding:5px 6px;border-bottom:1px solid rgba(128,128,128,.3);vertical-align:top}.mk-creator th{white-space:nowrap}.mk-creator ul{margin:4px 0;padding-left:1.4em}.mk-creator .mk-tags{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0}.mk-creator .mk-tags span{border:1px solid rgba(128,128,128,.45);border-radius:999px;padding:1px 10px;font-size:.9em}</style>
+<p><b>Mark Tsai（蔡豐全）</b>為深耕創業輔導與數位轉型領域的顧問與講師，長期擔任勞動力發展署創業顧問與多項政府計畫的顧問、業師與評審委員，協助中小企業導入數據分析與 AI 工具、申請政府補助計畫，並具備跨境電商實務與講師培訓的豐富經驗。本工具是其推廣 AI 工具運用於教學與課程情境的作品之一。</p>
+<p>聯絡信箱：<a href="mailto:tsaimark@gmail.com">tsaimark@gmail.com</a></p>
+<h3>專長</h3>
+<div class="mk-tags"><span>銷售數據分析</span><span>AI 工具運用</span><span>政府補助計畫申請</span><span>創業</span><span>跨境電商</span></div>
+<h3>證照</h3>
+<table>
+<thead><tr><th>年度</th><th>證照</th></tr></thead>
+<tbody>
+<tr><td>2013</td><td>青創總會 創業輔導顧問師班</td></tr>
+<tr><td>2014</td><td>青創總會 網路行銷講師培訓班</td></tr>
+<tr><td>2016</td><td>阿里巴巴 P4P 認證講師</td></tr>
+<tr><td>2017</td><td>iCap 訓練規劃與評量職能基準課程</td></tr>
+<tr><td>2023</td><td>iCap 職能導向課程申請認證實作班</td></tr>
+<tr><td>2025</td><td>iPAS AI 應用規劃師－初級</td></tr>
+<tr><td>2025</td><td>新北市社會局 社區數位陪伴員</td></tr>
+</tbody>
+</table>
+<h3>經歷</h3>
+<ul>
+<li>勞動力發展署桃竹苗分署 創業顧問（2017－迄今）</li>
+<li>勞動力發展署（北北基）小型企業人力提升計畫 顧問（2019－迄今）</li>
+<li>勞動力發展署（桃竹苗）小型企業人力提升計畫 顧問（2019－迄今）</li>
+<li>農業部農業科技司「科技農企業雙軸轉型躍升發展」科技計畫 業師（2025－2026）</li>
+<li>勞動力發展署 企業人力資源提升計畫 審查委員（2024）</li>
+<li>勞動力發展署 職前訓練評鑑計畫 委員（2022）</li>
+<li>勞動部桃竹苗分署 桃竹苗區域運籌人力資源整合服務計畫 顧問（2022－2023）</li>
+<li>經濟部中小企業處 SBIR 海選專案 評審委員（2019－2024）</li>
+<li>勞動力發展署 數位學習課程清單審查會議 審查委員（2024－2025）</li>
+<li>輔仁大學創新跨領域學院 課務委員（2024－2025）</li>
+<li>台北市進出口商業同業公會 跨境電商生態村 顧問</li>
+<li>台灣網商協會 顧問</li>
+<li>中華職能開發策進會 顧問（2018－2020）</li>
+<li>新北市汽車美容人員職業工會 顧問（2023－迄今）</li>
+<li>中華網路行銷講師協會 顧問（2022－迄今）</li>
+<li>新北市社企電商基地 輔導顧問（2018－2020）</li>
+<li>阿里巴巴國際站平台 認證講師（2016）</li>
+<li>巨匠電腦 跨境電子商務班 講師（2016－2017）</li>
+</ul>
+</div>
+</section>
+<p style="text-align:center"><a href="index.html">← 回到提詞器</a></p>
+</main>
+</body>
+</html>
