@@ -2,7 +2,7 @@
 
 講台上給講師自己看的平板提詞器：排課（段落標題／分鐘／6 種類型／要點／講稿備註／可刪減）→ 上課（大字倒數、要點、下一段、表定時間清單、預計下課與落後分鐘燈號）→ 落後時建議刪減或壓縮、一鍵套用 → 課後時間報告（預計 vs 實際、建議、CSV、套回排課）。
 
-2026-11-18 建立。使用者從「講師方向」清單挑第 8 項「講師現場提詞器」，規格由 Claude 決定；無序號。**尚未上線**（部署前先問使用者）。本機 port **8894**（`.claude/launch.json` 的 `lecture-teleprompter`、程式牆 `LOCAL_APPS`）。
+2026-11-18 建立。使用者從「講師方向」清單挑第 8 項「講師現場提詞器」，規格由 Claude 決定；無序號。**2026-11-18 已上線** <https://m255525.github.io/lecture-teleprompter/>（使用者自己 `gh repo create … --push`；Claude 開 Pages、補 master 部署規則、workflow_dispatch 一次成功）。線上 `TP_BASE=https://m255525.github.io/lecture-teleprompter/ python tools/e2e_tp.py` 37 項全過。已加程式牆與 github-dashboard `REPO_META`、AI 工具導航（`teach`、`trainer` 情境）。本機預覽 port **8894**。上線改版要升 `service-worker.js` 的 `CACHE_NAME`。
 
 ## 檔案
 - `data.js`：純函式引擎（`window.TP`，node 可 require），時間一律毫秒時間戳、`now` 由呼叫端傳入。
@@ -24,6 +24,3 @@
 
 ## 標準配備
 跑馬燈（不可關）、⚙ 常用設定（收合：顯示、🔔 提示音與震動、⌨ 簡報筆與鍵盤、💾 我的課程、清除全部資料、關於本工具）、首訪警語＋頁面入口、`manual.html#creator`（改 `tools/manual_body.html` 後跑 `python tools/build_manual.py`）、PWA（`tools/make_icons.py`；上線改版升 `service-worker.js` 的 `CACHE_NAME`）、訪客計數器 `m255525.lectureteleprompter`。無序號。
-
-## 上線時要做
-`gh repo create`（使用者自己跑或明確授權）→ 開 Pages 後補 master 部署規則再 `gh workflow run pages.yml` → 線上 e2e → 程式牆從 `LOCAL_APPS` 移到 `REPO_META`（github-dashboard 一起補）→ AI 工具導航 `TOOLS`＋放進 `teach`／`trainer` 情境 → 專案目錄.docx、工作區 CLAUDE.md、memory 改已上線。
