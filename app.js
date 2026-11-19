@@ -59,6 +59,34 @@ function footer(){
     '<br><img src="https://visitor-badge.laobi.icu/badge?page_id=m255525.lectureteleprompter" alt="訪客次數" height="20" loading="lazy" style="vertical-align:middle;margin-top:.4rem"></footer>';
 }
 
+/* ---------- 課程專案（course-link.js；沒有也照常運作）：只讀課程名稱、上課時段、大綱，不碰學員 ---------- */
+var MK = window.MKCourse && window.MKCourse.store ? window.MKCourse : null, MKD = null;
+function mkHM(v){ return /^([01]\d|2[0-3]):[0-5]\d$/.test(String(v || '')) ? v : ''; }
+function mkSess(d){ return (Array.isArray(d.course.sessions) ? d.course.sessions : []).filter(function(x){ return x && mkHM(x.start) && mkHM(x.end); }).slice(0, 60); }
+function mkPickHtml(){
+  var list = MK.store.list();
+  return '<h2>📥 從課程專案帶入</h2><p class="small">課程專案是同一台電腦上各辦訓工具共用的課程資料（課程招生海報產生器、出席簽到 QR…）。可以帶入課程名稱、某一堂的上課時間，或用海報上的課程大綱建立段落。</p>' +
+    (list.length ? '<div class="plist">' + list.map(function(d){ return '<div class="pitem"><b>' + esc(MKCourse.label(d)) + '</b><small>' + esc(MKCourse.when(d)) + '</small><button type="button" class="btn sm go" data-mkin="' + esc(d.id) + '">選這個</button></div>'; }).join('') + '</div>' : '<p>這台電腦還沒有課程專案。</p>') +
+    '<div class="stack"><label class="btn">📂 開啟課程專案檔（.json）<input type="file" id="mkFile" accept=".json,application/json" hidden></label><button type="button" class="btn" data-act="close">取消</button></div>';
+}
+function mkAsk(id){
+  var d = MK.store.get(id); if(!d){ toast('找不到這個課程專案'); return; }
+  MKD = d;
+  var ss = mkSess(d), ol = String(d.course.outline || '').trim();
+  openModal('<h2>📥 ' + esc(d.course.title || '課程專案') + '</h2><p class="small">排課名稱會改成課程名稱。</p>' +
+    (ss.length ? '<label class="fld">上課時間（出席簽到 QR 的堂次）<select id="mkSess"><option value="">不改開始／結束時間</option>' + ss.map(function(x, i){ return '<option value="' + i + '">' + esc((x.title ? x.title + '　' : '') + (x.date || '') + ' ' + x.start + '–' + x.end) + '</option>'; }).join('') + '</select></label>' : '<p class="small">課程專案裡沒有堂次時間（在出席簽到 QR 按「📤 存到課程專案」就會有）。</p>') +
+    (ol ? '<label class="chk"><input type="checkbox" id="mkOl"' + (P.segs.length ? '' : ' checked') + '> 用課程大綱建立段落（取代目前 ' + P.segs.length + ' 段）</label><pre class="small" style="white-space:pre-wrap;max-height:8rem;overflow:auto">' + esc(ol.slice(0, 600)) + '</pre>' : '<p class="small">課程專案裡沒有課程大綱（在課程招生海報產生器填大綱再存成課程專案就會有）。</p>') +
+    '<div class="stack"><button type="button" class="btn go" data-act="mkOk">帶入</button><button type="button" class="btn" data-act="close">取消</button></div>');
+}
+function mkApply(){
+  var d = MKD; if(!d) return;
+  var np = T.clone(P), si = $('mkSess') ? $('mkSess').value : '', ss = mkSess(d), useOl = $('mkOl') && $('mkOl').checked, parts = [];
+  if(d.course.title){ np.name = (d.course.title + (d.course.term ? ' ' + d.course.term : '')).slice(0, 60); parts.push('名稱'); }
+  if(si !== '' && ss[+si]){ np.start = ss[+si].start; np.end = ss[+si].end; parts.push('時間 ' + np.start + '–' + np.end); }
+  if(useOl){ var segs = T.parseOutline(String(d.course.outline || '')); if(segs.length){ np.segs = segs; parts.push(segs.length + ' 個段落'); } }
+  closeModal(); setPlan(np, '已帶入' + parts.join('、') + (useOl ? '，請補上休息與互動' : ''));
+}
+
 /* ---------- 排課 ---------- */
 function ipcCourses(){ try{ var s = JSON.parse(localStorage.getItem('ipc.state')); return s && Array.isArray(s.courses) ? s.courses.filter(function(c){ return c && c.name && c.outline; }) : []; }catch(e){ return []; } }
 function segHtml(s, i, row){
@@ -88,7 +116,7 @@ function renderEdit(){
     '<div class="card"><h2>課程設定</h2><div class="grid4"><label class="fld">課程名稱<input data-p="name" value="' + esc(P.name) + '" placeholder="例：AI 工具入門"></label><label class="fld">開始時間<input data-p="start" type="time" value="' + esc(P.start) + '"></label><label class="fld">表定下課（選填）<input data-p="end" type="time" value="' + esc(P.end) + '"></label></div>' +
       '<div class="grid3" style="margin-top:.55rem"><label class="fld">段落結束前幾分鐘變色<input data-p="warn" type="number" min="0" max="30" inputmode="numeric" value="' + P.warn + '"></label><label class="fld">連續講授幾分鐘提醒互動<input data-p="talkMax" type="number" min="0" max="120" inputmode="numeric" value="' + P.talkMax + '"><span class="hint">0＝不提醒</span></label><label class="fld">落後幾分鐘開始建議刪減<input data-p="lateTh" type="number" min="1" max="60" inputmode="numeric" value="' + P.lateTh + '"></label></div></div>' +
     '<div class="card"><h2>段落<span class="r">' + P.segs.length + ' 段・共 ' + T.durText(sc.total) + '</span></h2><div class="segs" id="segs">' + P.segs.map(function(s, i){ return segHtml(s, i, sc.rows[i]); }).join('') + '</div>' +
-      '<div class="stack" style="margin-top:.6rem"><button type="button" class="btn" data-act="addSeg">＋ 新增段落</button><button type="button" class="btn" data-act="paste">📋 貼上大綱</button>' + (ipc.length ? '<button type="button" class="btn" data-act="fromIpc">🎓 從講師型錄帶入</button>' : '') + '</div></div>' +
+      '<div class="stack" style="margin-top:.6rem"><button type="button" class="btn" data-act="addSeg">＋ 新增段落</button><button type="button" class="btn" data-act="paste">📋 貼上大綱</button>' + (ipc.length ? '<button type="button" class="btn" data-act="fromIpc">🎓 從講師型錄帶入</button>' : '') + (MK ? '<button type="button" class="btn" data-act="mkPick">📥 從課程專案帶入</button>' : '') + '</div></div>' +
     '<div class="card"><h2>範例與我的課程</h2><div class="exs">' + T.EXAMPLES.map(function(e){ return '<button type="button" class="ex" data-ex="' + e.id + '">' + esc(e.n) + '<small>' + esc(e.d) + '（虛構）</small></button>'; }).join('') + '</div>' +
       '<div class="stack" style="margin:.6rem 0 .4rem"><button type="button" class="btn" data-act="savePlan">💾 存到我的課程</button><button type="button" class="btn" data-act="newPlan">＋ 新的空白課程</button><button type="button" class="btn" data-act="exportPlans">⬇ 匯出</button><label class="btn" style="cursor:pointer">⬆ 匯入<input type="file" accept=".json,application/json" data-file="plans" hidden></label></div>' +
       (PLANS.length ? '<div class="plist">' + PLANS.map(function(x, i){ return '<div class="pitem"><b>' + esc(x.name) + '</b><span class="small">' + T.durText(T.total(T.normalize(x.plan))) + '</span><button type="button" class="btn sm" data-load="' + i + '">開啟</button><button type="button" class="mini" data-delplan="' + i + '" aria-label="刪除">✕</button></div>'; }).join('') + '</div>' : '<p class="small">還沒有存檔。排好的課程按「存到我的課程」，下次直接開啟。</p>') + '</div>' +
@@ -276,6 +304,7 @@ var ACT = {
   paste:function(){ openModal('<h2>📋 貼上大綱</h2><p class="small">一行一段，後面寫分鐘數，例如「開場與破冰 10」「實作練習｜20分」「午餐 1小時」。全部數字都不超過 8 又沒寫單位時，會當成小時。類型會依標題猜（休息、實作、討論、問答、活動），之後可以再改。</p><textarea id="pasteBox" placeholder="開場與破冰 10\nChatGPT 基本操作 20\n實作：第一個提示詞 20\n休息 10"></textarea><div class="stack"><button type="button" class="btn go" data-act="pasteReplace">取代目前段落</button><button type="button" class="btn" data-act="pasteAppend">接在後面</button><button type="button" class="btn" data-act="close">取消</button></div>'); },
   pasteReplace:function(){ var s = T.parseOutline($('pasteBox').value); if(!s.length){ toast('沒有讀到任何一行'); return; } P.segs = s; save(); closeModal(); renderEdit(); toast('已讀入 ' + s.length + ' 段'); },
   pasteAppend:function(){ var s = T.parseOutline($('pasteBox').value); if(!s.length){ toast('沒有讀到任何一行'); return; } P.segs = P.segs.concat(s).slice(0, 60); save(); closeModal(); renderEdit(); toast('已加入 ' + s.length + ' 段'); },
+  mkPick:function(){ openModal(mkPickHtml()); }, mkOk:mkApply,
   fromIpc:function(){ var cs = ipcCourses(); openModal('<h2>🎓 從講師型錄帶入</h2><p class="small">選一門課，用它的大綱（單元｜小時）建立段落，會取代目前的段落。</p><div class="plist">' + cs.map(function(c, i){ return '<div class="pitem"><b>' + esc(c.name) + '</b><button type="button" class="btn sm go" data-ipc="' + i + '">帶入</button></div>'; }).join('') + '</div><div class="stack"><button type="button" class="btn" data-act="close">取消</button></div>'); },
   savePlan:function(){ var n = (P.name || '').trim() || '未命名課程'; PLANS = PLANS.filter(function(x){ return x.name !== n; }); PLANS.unshift({name:n, plan:T.clone(P)}); PLANS = PLANS.slice(0, 30); lsSet('plans', JSON.stringify(PLANS)); renderEdit(); toast('已存到我的課程「' + n + '」'); },
   newPlan:function(){ var b = T.blank(); b.segs.push(T.blankSeg()); setPlan(b, '已開新的空白課程（原本的如果要留，記得先存）'); },
@@ -302,7 +331,7 @@ var ACT = {
 
 function segIdx(el){ var s = el.closest('.seg'); return s ? +s.dataset.i : -1; }
 document.addEventListener('click', function(e){
-  var t = e.target.closest('[data-act],[data-view],[data-ex],[data-load],[data-delplan],[data-mv],[data-ins],[data-del],[data-jump],[data-ipc],[data-ofs],[data-olfs],[data-olight],[data-osound]');
+  var t = e.target.closest('[data-act],[data-view],[data-ex],[data-load],[data-delplan],[data-mv],[data-ins],[data-del],[data-jump],[data-ipc],[data-mkin],[data-ofs],[data-olfs],[data-olight],[data-osound]');
   if(!t || t.disabled) return;
   if(t.tagName === 'A' && t.getAttribute('href') === '#') e.preventDefault();
   var d = t.dataset;
@@ -315,6 +344,7 @@ document.addEventListener('click', function(e){
   if(d.ins != null && t.hasAttribute('data-ins')){ var k = segIdx(t); if(P.segs.length >= 60) return; P.segs.splice(k + 1, 0, T.blankSeg()); OPENSEG = {}; save(); renderEdit(); var ins = document.querySelectorAll('.seg input[data-s="t"]')[k + 1]; if(ins) ins.focus(); return; }
   if(t.hasAttribute('data-del')){ var m = segIdx(t); if((P.segs[m].t || P.segs[m].pts) && !t.dataset.sure){ t.dataset.sure = '1'; t.textContent = '?'; t.style.borderColor = 'var(--red)'; setTimeout(function(){ if(t.isConnected){ delete t.dataset.sure; t.textContent = '✕'; t.style.borderColor = ''; } }, 3000); toast('再按一次刪除這段'); return; } P.segs.splice(m, 1); OPENSEG = {}; save(); renderEdit(); return; }
   if(d.jump){ var q = +d.jump; if(!LIVE || q === L().idx) return; if(railSure !== q){ railSure = q; $('lRail').innerHTML = '<p class="small" style="padding:0 .3rem .2rem">表定時間・點兩下可跳到該段</p>' + railHtml(LP(), L()); return; } railSure = -1; if(L().skip[q]) delete L().skip[q]; act(function(p, st, n){ T.go(p, st, q, n); }); return; }
+  if(d.mkin){ mkAsk(d.mkin); return; }
   if(d.ipc){ var c = ipcCourses()[+d.ipc]; if(c){ var np = T.clone(P); np.name = c.name; np.segs = T.parseOutline(c.outline, true); closeModal(); setPlan(np, '已帶入「' + c.name + '」的大綱，請補上休息與互動'); } return; }
   if(d.ofs){ lsSet('fs', d.ofs); applyView(); openSettings(); return; }
   if(d.olfs){ lsSet('lfs', d.olfs); applyView(); openSettings(); return; }
@@ -331,6 +361,7 @@ document.addEventListener('input', function(e){
     save(); clearTimeout(sideT); sideT = setTimeout(refreshSide, 150); return; }
 });
 document.addEventListener('change', function(e){
+  if(e.target.id === 'mkFile' && e.target.files[0]){ var mt = e.target, mf = new FileReader(); mf.onload = function(){ mt.value = ''; var r = MKCourse.fromText(mf.result); if(r.error){ toast(r.error); return; } var last = null; r.docs.forEach(function(x){ last = MK.store.put(x) || last; }); if(!last){ toast('存不進這台電腦（瀏覽器空間不足或封鎖網站資料）'); return; } if(r.docs.length === 1) mkAsk(last.id); else openModal(mkPickHtml()); }; mf.readAsText(mt.files[0]); return; }
   var t = e.target;
   if(t.dataset.file === 'plans' && t.files && t.files[0]){
     var fr = new FileReader();

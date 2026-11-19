@@ -14,6 +14,7 @@
 - `app.js`：畫面。localStorage `tp.` 前綴：`plan`、`plans`（30 個）、`live`（`{plan 快照, st}`，**重新整理會接著計時**）、`last`（報告來源）、`view`、`lfs`、`light`、`sound`、`note`、`fs`、`fold`、`warnSeen`、`marquee`。上課畫面 250ms `tick()` 只更新文字節點，換段才 `renderLive()`（**renderLive 要重設 `banKey`，否則新畫面的提示區是空的**）。鍵盤／簡報筆：PageDown/→/↓ 下一段、PageUp/←/↑ 上一段、`.`/B/空白 暫停、+/- 調時間，0.7 秒內連按只算一次。右側清單點兩下跳段。Wake Lock、全螢幕、Web Audio 提示音＋震動。
   - **⚠ 設定按鈕的 data 屬性不能叫 `data-fs`／`data-lfs`**：`<html>` 本身有 `data-fs`／`data-lfs`，click 事件 `closest()` 會一路找到 `<html>`，點畫面任何空白處都會開設定（2026-11-18 踩到，已改成 `data-ofs` 等）。
   - 「🎓 從講師型錄帶入」讀同源 `localStorage['ipc.state']`（[[instructor-profile-catalog]] 的課程大綱，小時單位），只有兩站都在 m255525.github.io 才看得到按鈕。
+  - 「📥 從課程專案帶入」（2026-11-19，`course-link.js` 是 `課程平台/course-link/` 正本的複製檔）：`mkAsk` 讓人選堂次（`course.sessions`，出席簽到 QR 存的，HH:MM 驗證）與「用課程大綱建立段落」（`course.outline`，海報存的，`parseOutline` 自動判斷小時）→ `mkApply` 走 `setPlan`。只讀不寫。
   - 測試掛鉤 `window._tp`：`skip(ms)` 快轉時間（不跨重新整理保留）、`resetNav()` 解除連按防呆。
 - 畫面：後台舞台燈風（炭黑底、琥珀提示色、紅色 tally 燈、Roboto Mono 倒數數字）；上課畫面可切白底與三種字級。
 
